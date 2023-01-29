@@ -1,0 +1,20 @@
+---
+version: "3.9"
+
+services:
+  headscale:
+    # image: ghcr.io/juanfont/headscale:0.19
+    build: .
+    command: headscale serve
+
+    ports:
+      # Listen on virtual bridge (virbr0)
+      - "192.168.122.1:8080:8080"
+
+    volumes:
+      - ./config/headscale.yaml:/etc/headscale/config.yaml
+      - headscale:/var/lib/headscale
+
+volumes:
+  headscale:
+    driver: local
