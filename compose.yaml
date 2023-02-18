@@ -13,7 +13,7 @@ services:
 
     volumes:
       - ./config/headscale.yaml:/etc/headscale/config.yaml
-      - headscale:/var/lib/headscale
+      - headscale:/data
 
 volumes:
   headscale:

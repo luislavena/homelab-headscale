@@ -2,9 +2,9 @@
 server_url: http://192.168.122.1:8080
 listen_addr: 0.0.0.0:8080
 metrics_listen_addr: 127.0.0.1:9090
-private_key_path: /var/lib/headscale/private.key
+private_key_path: /data/private.key
 noise:
-  private_key_path: /var/lib/headscale/noise_private.key
+  private_key_path: /data/noise_private.key
 
 ip_prefixes:
   - 100.64.0.0/10
@@ -22,7 +22,7 @@ derp:
 disable_check_updates: true
 
 db_type: sqlite3
-db_path: /var/lib/headscale/db.sqlite
+db_path: /data/db.sqlite
 
 tls_cert_path: ""
 tls_key_path: ""
