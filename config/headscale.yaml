@@ -1,7 +1,7 @@
 ---
 server_url: http://192.168.122.1:8080
 listen_addr: 0.0.0.0:8080
-metrics_listen_addr: 127.0.0.1:9090
+metrics_listen_addr: 0.0.0.0:9090
 private_key_path: /data/private.key
 noise:
   private_key_path: /data/noise_private.key
