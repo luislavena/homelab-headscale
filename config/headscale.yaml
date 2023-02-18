@@ -7,8 +7,8 @@ noise:
   private_key_path: /var/lib/headscale/noise_private.key
 
 ip_prefixes:
-  # - fd7a:115c:a1e0::/48
   - 100.64.0.0/10
+  - fd7a:115c:a1e0::/48
 
 # Disables the automatic check for headscale updates on startup
 disable_check_updates: true
@@ -25,8 +25,8 @@ dns_config:
   nameservers:
     - 1.1.1.1
     - 1.0.0.1
-    # - 2606:4700:4700::1111
-    # - 2606:4700:4700::1001
+    - 2606:4700:4700::1111
+    - 2606:4700:4700::1001
 
   magic_dns: true
   base_domain: luislavena.info
