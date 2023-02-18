@@ -5,7 +5,7 @@ services:
   headscale:
     # image: ghcr.io/juanfont/headscale:0.20
     build: .
-    command: headscale serve
+    # command: headscale serve
 
     ports:
       # Listen on virtual bridge (virbr0)
