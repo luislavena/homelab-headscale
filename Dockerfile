@@ -12,10 +12,11 @@ RUN --mount=type=cache,target=/var/cache/apk \
     --mount=type=tmpfs,target=/tmp \
     set -eux; \
     cd /tmp; \
+    # Headscale
     { \
         export \
-            HEADSCALE_VERSION=0.19.0 \
-            HEADSCALE_SHA256=76e62be5f8a82763995903d413fa71c57143ea0b9c21d376be66793fdb6e993a; \
+            HEADSCALE_VERSION=0.20.0 \
+            HEADSCALE_SHA256=1553d776b915c897d15f86adec8648378610128fdad81a848443853691748e53; \
         wget -q -O headscale https://github.com/juanfont/headscale/releases/download/v${HEADSCALE_VERSION}/headscale_${HEADSCALE_VERSION}_linux_amd64; \
         echo "${HEADSCALE_SHA256} *headscale" | sha256sum -c - >/dev/null 2>&1; \
         chmod +x headscale; \
