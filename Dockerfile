@@ -43,5 +43,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
 # configuration
 COPY ./config/headscale.yaml /etc/headscale/config.yaml
 COPY ./config/litestream.yml /etc/litestream.yml
+COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/headscale", "serve"]
+ENTRYPOINT ["/container-entrypoint.sh"]
