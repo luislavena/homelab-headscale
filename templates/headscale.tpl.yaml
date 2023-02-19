@@ -1,5 +1,5 @@
 ---
-server_url: http://192.168.122.1:8080
+server_url: $SERVER_URL
 listen_addr: 0.0.0.0:8080
 metrics_listen_addr: 0.0.0.0:9090
 private_key_path: /data/private.key
@@ -22,8 +22,9 @@ derp:
 disable_check_updates: true
 
 db_type: sqlite3
-db_path: /data/db.sqlite
+db_path: /data/headscale.sqlite3
 
+# TLS
 tls_cert_path: ""
 tls_key_path: ""
 
@@ -40,7 +41,7 @@ dns_config:
     - 2606:4700:4700::1001
 
   magic_dns: true
-  base_domain: luislavena.info
+  base_domain: $BASE_DOMAIN
 
 logtail:
   enabled: false
