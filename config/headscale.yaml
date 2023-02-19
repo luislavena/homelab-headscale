@@ -24,6 +24,9 @@ disable_check_updates: true
 db_type: sqlite3
 db_path: /var/lib/headscale/db.sqlite
 
+tls_cert_path: ""
+tls_key_path: ""
+
 log:
   format: text
   level: info
