@@ -10,6 +10,14 @@ ip_prefixes:
   - 100.64.0.0/10
   - fd7a:115c:a1e0::/48
 
+derp:
+  server:
+    enabled: false
+  urls:
+    - https://controlplane.tailscale.com/derpmap/default
+  auto_update_enabled: true
+  update_frequency: 24h
+
 # Disables the automatic check for headscale updates on startup
 disable_check_updates: true
 
