@@ -24,7 +24,6 @@ services:
       - "192.168.122.1:8080:8080"
 
     volumes:
-      - ./templates/litestream.template.yml:/etc/litestream.yml
       - headscale:/data
 
   minio:
