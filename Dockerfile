@@ -40,8 +40,8 @@ RUN --mount=type=cache,target=/var/cache/apk \
     litestream version
 
 # ---
-# configuration
-COPY ./config/headscale.yaml /etc/headscale/config.yaml
+# copy configuration and templates
+COPY ./templates/headscale.tpl.yaml /usr/local/share/headscale/config.template.yaml
 COPY ./config/litestream.yml /etc/litestream.yml
 COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
 
