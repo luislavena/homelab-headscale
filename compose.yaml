@@ -36,9 +36,6 @@ services:
       - MINIO_ROOT_PASSWORD=changeme
 
     ports:
-      # Expose S3-compatible endpoint
-      - "9000:9000"
-
       # Limit MinIO console to localhost
       - "127.0.0.1:9090:9090"
 
