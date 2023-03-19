@@ -22,12 +22,27 @@ RUN --mount=type=cache,target=/var/cache/apk \
         chmod +x headscale; \
         mv headscale /usr/local/bin/; \
     }; \
+    # Litestream
+    { \
+        export \
+            LITESTREAM_VERSION=0.3.9 \
+            LITESTREAM_SHA256=7c19a583f022680a14f530fe0950e621bedb59666a603770cbc16ec5d920c54b; \
+        wget -q -O litestream.tar.gz https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-amd64-static.tar.gz; \
+        echo "${LITESTREAM_SHA256} *litestream.tar.gz" | sha256sum -c - >/dev/null 2>&1; \
+        tar -xf litestream.tar.gz; \
+        mv litestream /usr/local/bin/; \
+        rm -f litestream.tar.gz; \
+    }; \
     # smoke tests
     [ "$(command -v headscale)" = '/usr/local/bin/headscale' ]; \
-    headscale version
+    [ "$(command -v litestream)" = '/usr/local/bin/litestream' ]; \
+    headscale version; \
+    litestream version
 
 # ---
 # configuration
 COPY ./config/headscale.yaml /etc/headscale/config.yaml
+COPY ./config/litestream.yml /etc/litestream.yml
+COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/headscale", "serve"]
+ENTRYPOINT ["/container-entrypoint.sh"]
