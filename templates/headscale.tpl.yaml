@@ -1,0 +1,47 @@
+---
+server_url: $SERVER_URL
+listen_addr: 0.0.0.0:8080
+metrics_listen_addr: 0.0.0.0:9090
+private_key_path: /data/private.key
+noise:
+  private_key_path: /data/noise_private.key
+
+ip_prefixes:
+  - 100.64.0.0/10
+  - fd7a:115c:a1e0::/48
+
+derp:
+  server:
+    enabled: false
+  urls:
+    - https://controlplane.tailscale.com/derpmap/default
+  auto_update_enabled: true
+  update_frequency: 24h
+
+# Disables the automatic check for headscale updates on startup
+disable_check_updates: true
+
+db_type: sqlite3
+db_path: /data/headscale.sqlite3
+
+# TLS
+tls_cert_path: ""
+tls_key_path: ""
+
+log:
+  format: text
+  level: info
+
+dns_config:
+  override_local_dns: true
+  nameservers:
+    - 1.1.1.1
+    - 1.0.0.1
+    - 2606:4700:4700::1111
+    - 2606:4700:4700::1001
+
+  magic_dns: true
+  base_domain: $BASE_DOMAIN
+
+logtail:
+  enabled: false

@@ -25,3 +25,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     # smoke tests
     [ "$(command -v headscale)" = '/usr/local/bin/headscale' ]; \
     headscale version
+
+# ---
+# configuration
+COPY ./config/headscale.yaml /etc/headscale/config.yaml
+
+ENTRYPOINT ["/usr/local/bin/headscale", "serve"]
