@@ -1,4 +1,4 @@
-FROM alpine:3.17.1
+FROM alpine:3.17.2
 
 # ---
 # upgrade system and installed dependencies for security patches
@@ -40,9 +40,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     litestream version
 
 # ---
-# configuration
-COPY ./config/headscale.yaml /etc/headscale/config.yaml
-COPY ./config/litestream.yml /etc/litestream.yml
+# copy configuration and templates
+COPY ./templates/headscale.template.yaml /usr/local/share/headscale/config.template.yaml
+COPY ./templates/litestream.template.yml /etc/litestream.yml
 COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
 
 ENTRYPOINT ["/container-entrypoint.sh"]

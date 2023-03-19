@@ -1,4 +1,4 @@
-app = "$FLY_APP_NAME"
+app = "$FLY_APP"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
@@ -33,5 +33,5 @@ path = "/metrics"
     timeout = "2s"
 
 [mounts]
-source = "$FLY_HEADSCALE_VOLUME"
+source = "$FLY_VOLUME"
 destination = "/data"

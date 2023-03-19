@@ -1,5 +1,5 @@
 ---
-server_url: $SERVER_URL
+server_url: $HEADSCALE_SERVER_URL
 listen_addr: 0.0.0.0:8080
 metrics_listen_addr: 0.0.0.0:9090
 private_key_path: /data/private.key
@@ -41,7 +41,7 @@ dns_config:
     - 2606:4700:4700::1001
 
   magic_dns: true
-  base_domain: $BASE_DOMAIN
+  base_domain: $HEADSCALE_BASE_DOMAIN
 
 logtail:
   enabled: false
