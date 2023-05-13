@@ -15,8 +15,8 @@ RUN --mount=type=cache,target=/var/cache/apk \
     # Headscale
     { \
         export \
-            HEADSCALE_VERSION=0.21.0 \
-            HEADSCALE_SHA256=d34e93f3cf530edfe342723d0d9d05e0cce7b17c260faf3c4065d9edd55c5ff3; \
+            HEADSCALE_VERSION=0.22.3 \
+            HEADSCALE_SHA256=41eb475ba94d2f4efdd5b90ca76d3926a0fc0b561baabf6190ca32335c9102d2; \
         wget -q -O headscale https://github.com/juanfont/headscale/releases/download/v${HEADSCALE_VERSION}/headscale_${HEADSCALE_VERSION}_linux_amd64; \
         echo "${HEADSCALE_SHA256} *headscale" | sha256sum -c - >/dev/null 2>&1; \
         chmod +x headscale; \

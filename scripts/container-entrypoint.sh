@@ -49,7 +49,15 @@ check_config_files() {
 	fi
 }
 
+check_socket_directory() {
+	mkdir -p /var/run/headscale
+}
+
 if ! check_config_files; then
+	exit 1
+fi
+
+if ! check_socket_directory; then
 	exit 1
 fi
 
