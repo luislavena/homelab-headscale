@@ -5,6 +5,8 @@ set -e
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
 	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
+	local headscale_acls_template=/usr/local/share/headscale/acls.template.hjson
+	local headscale_acls_path=/data/acls.hjson
 	local headscale_private_key_path=/data/private.key
 	local headscale_noise_private_key_path=/data/noise_private.key
 
@@ -28,6 +30,7 @@ check_config_files() {
 		if [ $abort_config -eq 0 ]; then
 			mkdir -p /etc/headscale
 			cp $headscale_config_template $headscale_config_path
+			cp $headscale_acls_template $headscale_acls_path
 			sed -i "s@\$HEADSCALE_SERVER_URL@$HEADSCALE_SERVER_URL@" $headscale_config_path
 			sed -i "s@\$HEADSCALE_BASE_DOMAIN@$HEADSCALE_BASE_DOMAIN@" $headscale_config_path
 			echo "INFO: Headscale configuration file created."
