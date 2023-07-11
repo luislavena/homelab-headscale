@@ -24,6 +24,8 @@ disable_check_updates: true
 db_type: sqlite3
 db_path: /data/headscale.sqlite3
 
+acl_policy_path: "/data/acls.hjson"
+
 # TLS
 tls_cert_path: ""
 tls_key_path: ""
