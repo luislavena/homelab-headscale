@@ -37,10 +37,8 @@ log:
 dns_config:
   override_local_dns: true
   nameservers:
-    - 1.1.1.1
-    - 1.0.0.1
-    - 2606:4700:4700::1111
-    - 2606:4700:4700::1001
+    - 100.64.0.1
+    - 100.64.0.2
 
   magic_dns: true
   base_domain: $HEADSCALE_BASE_DOMAIN
