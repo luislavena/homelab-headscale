@@ -4,7 +4,8 @@ FROM alpine:3.18.0
 # upgrade system and installed dependencies for security patches
 RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
     set -eux; \
-    apk upgrade
+    apk upgrade; \
+    apk add nano curl
 
 # ---
 # copy headscale

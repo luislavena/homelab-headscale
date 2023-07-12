@@ -64,6 +64,10 @@ if ! check_socket_directory; then
 	exit 1
 fi
 
+# dump external ip address
+echo "INFO: Trying to get external ip..."
+curl ifconfig.io
+
 echo "INFO: Attempt to restore Headscale database if missing..."
 litestream restore -v -if-db-not-exists -if-replica-exists /data/headscale.sqlite3
 
