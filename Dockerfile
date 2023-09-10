@@ -1,4 +1,4 @@
-FROM alpine:3.18.0
+FROM alpine:3.18.3
 
 # ---
 # upgrade system and installed dependencies for security patches
@@ -25,9 +25,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     # Litestream
     { \
         export \
-            LITESTREAM_VERSION=0.3.9 \
-            LITESTREAM_SHA256=7c19a583f022680a14f530fe0950e621bedb59666a603770cbc16ec5d920c54b; \
-        wget -q -O litestream.tar.gz https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-amd64-static.tar.gz; \
+            LITESTREAM_VERSION=0.3.11 \
+            LITESTREAM_SHA256=83b63dffb1ef5f3e54e9399dcf750a35a6a9b3b20a3ca5601653cce36146c51b; \
+        wget -q -O litestream.tar.gz https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-amd64.tar.gz; \
         echo "${LITESTREAM_SHA256} *litestream.tar.gz" | sha256sum -c - >/dev/null 2>&1; \
         tar -xf litestream.tar.gz; \
         mv litestream /usr/local/bin/; \
