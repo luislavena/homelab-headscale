@@ -1,6 +1,4 @@
 ---
-version: "3.9"
-
 services:
   headscale:
     # image: ghcr.io/juanfont/headscale:0.20
