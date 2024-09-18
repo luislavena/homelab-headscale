@@ -1,4 +1,4 @@
-FROM alpine:3.18.3
+FROM alpine:3.20.3
 
 # ---
 # upgrade system and installed dependencies for security patches
