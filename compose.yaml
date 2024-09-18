@@ -2,8 +2,11 @@
 services:
   headscale:
     # image: ghcr.io/juanfont/headscale:0.20
-    build: .
     # command: headscale serve
+    build:
+      context: .
+      platforms:
+        - linux/amd64
 
     depends_on:
       - minio
