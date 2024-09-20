@@ -36,18 +36,18 @@ RUN --mount=type=cache,target=/var/cache/apk \
     }; \
     # Litestream
     { \
-        export LITESTREAM_VERSION=0.3.11; \
+        export LITESTREAM_VERSION=0.3.13; \
         case "$(arch)" in \
         x86_64) \
             export \
                 LITESTREAM_ARCH=amd64 \
-                LITESTREAM_SHA256=83b63dffb1ef5f3e54e9399dcf750a35a6a9b3b20a3ca5601653cce36146c51b \
+                LITESTREAM_SHA256=eb75a3de5cab03875cdae9f5f539e6aedadd66607003d9b1e7a9077948818ba0 \
             ; \
             ;; \
         aarch64) \
             export \
                 LITESTREAM_ARCH=arm64 \
-                LITESTREAM_SHA256=37be08622b91239ca1a4d417b37889cbac2c6aa83bfcfa6881bcaa7642fc8ee2 \
+                LITESTREAM_SHA256=9585f5a508516bd66af2b2376bab4de256a5ef8e2b73ec760559e679628f2d59 \
             ; \
             ;; \
         esac; \

@@ -62,7 +62,7 @@ if ! check_socket_directory; then
 fi
 
 echo "INFO: Attempt to restore Headscale database if missing..."
-litestream restore -v -if-db-not-exists -if-replica-exists /data/headscale.sqlite3
+litestream restore -if-db-not-exists -if-replica-exists /data/headscale.sqlite3
 
 echo "INFO: Starting Headscale using Litestream..."
 exec litestream replicate -exec 'headscale serve'
