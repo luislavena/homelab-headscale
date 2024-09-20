@@ -12,8 +12,8 @@ services:
       - minio
 
     environment:
-      - HEADSCALE_SERVER_URL=http://192.168.122.1:8080
-      - HEADSCALE_BASE_DOMAIN=luislavena.info
+      - HEADSCALE_SERVER_URL=http://192.168.106.2:8080
+      - HEADSCALE_BASE_DOMAIN=tn.luislavena.local
       # - HEADSCALE_PRIVATE_KEY=CHANGEME
       # - HEADSCALE_NOISE_PRIVATE_KEY=CHANGEME
       - S3_ACCESS_KEY_ID=admin
@@ -23,8 +23,7 @@ services:
       - S3_ENDPOINT=http://minio:9000
 
     ports:
-      # Listen on virtual bridge (virbr0)
-      - "192.168.122.1:8080:8080"
+      - "8080:8080"
 
     volumes:
       - headscale:/data
@@ -39,8 +38,7 @@ services:
       - MINIO_ROOT_PASSWORD=changeme
 
     ports:
-      # Limit MinIO console to localhost
-      - "127.0.0.1:9090:9090"
+      - "9090:9090"
 
     volumes:
       - minio:/data
