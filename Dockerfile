@@ -1,4 +1,4 @@
-FROM alpine:3.18.3
+FROM alpine:3.20.3
 
 # ---
 # upgrade system and installed dependencies for security patches
@@ -14,20 +14,44 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cd /tmp; \
     # Headscale
     { \
-        export \
-            HEADSCALE_VERSION=0.22.3 \
-            HEADSCALE_SHA256=41eb475ba94d2f4efdd5b90ca76d3926a0fc0b561baabf6190ca32335c9102d2; \
-        wget -q -O headscale https://github.com/juanfont/headscale/releases/download/v${HEADSCALE_VERSION}/headscale_${HEADSCALE_VERSION}_linux_amd64; \
+        export HEADSCALE_VERSION=0.23.0; \
+        case "$(arch)" in \
+        x86_64) \
+            export \
+                HEADSCALE_ARCH=amd64 \
+                HEADSCALE_SHA256=d9193dad4b070b9b3f6d54c8f14366952944b6e917672c0bc1dfd8f5491287a7 \
+            ; \
+            ;; \
+        aarch64) \
+            export \
+                HEADSCALE_ARCH=arm64 \
+                HEADSCALE_SHA256=99fa9b2944c50759882b578e78aa11968d6fdec9bbfeced88237a1138b89e9fe \
+            ; \
+            ;; \
+        esac; \
+        wget -q -O headscale https://github.com/juanfont/headscale/releases/download/v${HEADSCALE_VERSION}/headscale_${HEADSCALE_VERSION}_linux_${HEADSCALE_ARCH}; \
         echo "${HEADSCALE_SHA256} *headscale" | sha256sum -c - >/dev/null 2>&1; \
         chmod +x headscale; \
         mv headscale /usr/local/bin/; \
     }; \
     # Litestream
     { \
-        export \
-            LITESTREAM_VERSION=0.3.11 \
-            LITESTREAM_SHA256=83b63dffb1ef5f3e54e9399dcf750a35a6a9b3b20a3ca5601653cce36146c51b; \
-        wget -q -O litestream.tar.gz https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-amd64.tar.gz; \
+        export LITESTREAM_VERSION=0.3.13; \
+        case "$(arch)" in \
+        x86_64) \
+            export \
+                LITESTREAM_ARCH=amd64 \
+                LITESTREAM_SHA256=eb75a3de5cab03875cdae9f5f539e6aedadd66607003d9b1e7a9077948818ba0 \
+            ; \
+            ;; \
+        aarch64) \
+            export \
+                LITESTREAM_ARCH=arm64 \
+                LITESTREAM_SHA256=9585f5a508516bd66af2b2376bab4de256a5ef8e2b73ec760559e679628f2d59 \
+            ; \
+            ;; \
+        esac; \
+        wget -q -O litestream.tar.gz https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-v${LITESTREAM_VERSION}-linux-${LITESTREAM_ARCH}.tar.gz; \
         echo "${LITESTREAM_SHA256} *litestream.tar.gz" | sha256sum -c - >/dev/null 2>&1; \
         tar -xf litestream.tar.gz; \
         mv litestream /usr/local/bin/; \
