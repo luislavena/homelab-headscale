@@ -92,7 +92,7 @@ server URL. Example:
 
 ```
 HEADSCALE_SERVER_URL=https://hs.example.com:443/
-HEADSCALE_BASE_DOMAIN=example.com
+HEADSCALE_BASE_DOMAIN=tn.example.com
 ```
 
 Now, you need to enter your S3 credentials, bucket and endpoint, necessary
