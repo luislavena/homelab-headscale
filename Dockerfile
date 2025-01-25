@@ -14,18 +14,18 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cd /tmp; \
     # Headscale
     { \
-        export HEADSCALE_VERSION=0.23.0; \
+        export HEADSCALE_VERSION=0.24.1; \
         case "$(arch)" in \
         x86_64) \
             export \
                 HEADSCALE_ARCH=amd64 \
-                HEADSCALE_SHA256=d9193dad4b070b9b3f6d54c8f14366952944b6e917672c0bc1dfd8f5491287a7 \
+                HEADSCALE_SHA256=28540f5bed81e574dd99b3100ee2fa932ecbb68c6ac093a86f2fc32cb07ff731 \
             ; \
             ;; \
         aarch64) \
             export \
                 HEADSCALE_ARCH=arm64 \
-                HEADSCALE_SHA256=99fa9b2944c50759882b578e78aa11968d6fdec9bbfeced88237a1138b89e9fe \
+                HEADSCALE_SHA256=bf9e94e1caf95f1d67668633f68a4c3bbb4432769b1f8651a501a3f26f6b76ca \
             ; \
             ;; \
         esac; \
