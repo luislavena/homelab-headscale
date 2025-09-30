@@ -1,0 +1,47 @@
+name: Create Release PR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Batch changes
+        uses: miniscruff/changie-action@v2
+        with:
+          version: latest
+          args: batch auto
+
+      - name: Merge changes
+        uses: miniscruff/changie-action@v2
+        with:
+          version: latest
+          args: merge
+
+      - name: Get latest version
+        id: latest
+        uses: miniscruff/changie-action@v2
+        with:
+          version: latest
+          args: latest
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Release ${{ steps.latest.outputs.output }}"
+          branch: "release/${{ steps.latest.outputs.output }}"
+          commit-message: "Release ${{ steps.latest.outputs.output }}"
+          delete-branch: true
+          body: |
+            Automated release PR for version ${{ steps.latest.outputs.output }}
+
+            This PR updates the CHANGELOG.md and VERSION file for the new release.
+
+            Once merged, the release workflow will automatically create a GitHub release and build container images.

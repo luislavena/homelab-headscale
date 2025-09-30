@@ -1,0 +1,23 @@
+name: Check CHANGELOG entries
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Check for CHANGELOG entry
+        uses: brettcannon/check-for-changed-files@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          file-pattern: |
+            .changes/unreleased/*.yaml
+            CHANGELOG.md
+          skip-label: "skip changelog"
+          failure-message: >-
+            Missing a changelog file in ${file-pattern}; please add one or
+            apply the ${skip-label} label
