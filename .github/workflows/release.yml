@@ -1,0 +1,101 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "CHANGELOG.md"
+
+# We must only run one release workflow at a time to prevent corrupting
+# our release artifacts.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version-tag: ${{ steps.version.outputs.version-tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest version
+        id: changie
+        uses: miniscruff/changie-action@v2
+        with:
+          version: latest
+          args: latest
+
+      - name: Setup version output
+        id: version
+        run: echo "version-tag=${{ steps.changie.outputs.output }}" >> "$GITHUB_OUTPUT"
+
+  build-container:
+    runs-on: ubuntu-latest
+    needs: setup
+    permissions:
+      # allow Depot to connect with GitHub via OIDC
+      id-token: write
+      # allow pushing to GitHub Container Registry (ghcr.io)
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Depot CLI
+        uses: depot/setup-action@v1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push container image
+        uses: depot/build-push-action@v1
+        with:
+          project: ${{ secrets.DEPOT_PROJECT_ID }}
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.version-tag }}
+            ghcr.io/${{ github.repository }}:latest
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [setup, build-container]
+    permissions:
+      # allow creating/updating releases
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build release notes
+        run: |
+          cat .changes/${{ needs.setup.outputs.version-tag }}.md > combined_notes.md
+          echo '' >> combined_notes.md
+          echo 'Container image:' >> combined_notes.md
+          echo '- `ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.version-tag }}`' >> combined_notes.md
+          echo '- `ghcr.io/${{ github.repository }}:latest`' >> combined_notes.md
+
+      - name: Create git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{ needs.setup.outputs.version-tag }} -m "Release ${{ needs.setup.outputs.version-tag }}"
+          git push origin ${{ needs.setup.outputs.version-tag }}
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.setup.outputs.version-tag }}
+          name: ${{ needs.setup.outputs.version-tag }}
+          body_path: combined_notes.md
+          draft: false
+          prerelease: false

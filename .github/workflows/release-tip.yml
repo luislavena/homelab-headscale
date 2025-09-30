@@ -1,0 +1,71 @@
+name: Release Tip
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "CHANGELOG.md"
+
+# We must only run one release workflow at a time to prevent corrupting
+# our release artifacts.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    permissions:
+      # allow Depot to connect with GitHub via OIDC
+      id-token: write
+      # allow creating/updating releases
+      contents: write
+      # allow pushing to GitHub Container Registry (ghcr.io)
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Depot CLI
+        uses: depot/setup-action@v1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push container image
+        uses: depot/build-push-action@v1
+        with:
+          project: ${{ secrets.DEPOT_PROJECT_ID }}
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/${{ github.repository }}:tip
+
+      - name: Create or update tip tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f -a tip -m "Latest continuous build" ${GITHUB_SHA}
+          git push origin --force tip
+
+      - name: Create or update tip release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: tip
+          name: "Latest continuous build (tip)"
+          target_commitish: ${{ github.sha }}
+          body: |
+            This is the latest continuous build from the `main` branch.
+
+            Commit: `${{ github.sha }}`
+
+            Container image:
+            - `ghcr.io/${{ github.repository }}:tip`
+          prerelease: true
+          draft: false
