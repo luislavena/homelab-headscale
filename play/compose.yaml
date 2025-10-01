@@ -1,0 +1,71 @@
+---
+name: headscale
+
+services:
+  server:
+    build:
+      context: ..
+
+    depends_on:
+      replica1:
+        condition: service_healthy
+      replica2:
+        condition: service_healthy
+
+    environment:
+      - HEADSCALE_SERVER_URL=https://hs.example.local
+      - HEADSCALE_BASE_DOMAIN=tn.luislavena.local
+      # - HEADSCALE_PRIVATE_KEY=CHANGEME
+      # - HEADSCALE_NOISE_PRIVATE_KEY=CHANGEME
+      # Replica 1
+      - REPLICA1_BUCKET=mybackup
+      - REPLICA1_ENDPOINT=http://replica1:9000
+      - REPLICA1_REGION=auto
+      - REPLICA1_ACCESS_KEY_ID=keyid
+      - REPLICA1_SECRET_ACCESS_KEY=secretkey
+      # Replica 2
+      - REPLICA2_BUCKET=mybackup
+      - REPLICA2_ENDPOINT=http://replica2:9000
+      - REPLICA2_REGION=auto
+      - REPLICA2_ACCESS_KEY_ID=keyid
+      - REPLICA2_SECRET_ACCESS_KEY=secretkey
+
+    labels:
+      # Ref: https://docs.orbstack.dev/docker/domains#custom
+      - dev.orbstack.domains=hs.example.local
+      # Ref: https://docs.orbstack.dev/docker/domains#ports
+      - dev.orbstack.http-port=8080
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - headscale:/data
+
+  replica1: &replica
+    image: registry.docker.com/bitnamilegacy/minio:latest
+    environment:
+      - MINIO_ROOT_USER=keyid
+      - MINIO_ROOT_PASSWORD=secretkey
+      - MINIO_DEFAULT_BUCKETS=mybackup
+      - MINIO_SCHEME=http
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - replica1:/bitnamilegacy/minio/data
+
+  replica2:
+    <<: *replica
+    volumes:
+      - replica2:/bitnamilegacy/minio/data
+
+volumes:
+  headscale:
+    driver: local
+  replica1:
+    driver: local
+  replica2:
+    driver: local
