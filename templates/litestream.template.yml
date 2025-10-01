@@ -1,11 +1,11 @@
 ---
 dbs:
-  - path: /data/headscale.sqlite3
+  - path: ${DB_FILE}
     replicas:
       - name: replica1
         type: s3
         bucket: ${REPLICA1_BUCKET}
-        path: headscale
+        path: ${APP_NAME}
         endpoint: ${REPLICA1_ENDPOINT}
         region: ${REPLICA1_REGION}
         access-key-id: ${REPLICA1_ACCESS_KEY_ID}
@@ -13,7 +13,7 @@ dbs:
       - name: replica2
         type: s3
         bucket: ${REPLICA2_BUCKET}
-        path: headscale
+        path: ${APP_NAME}
         endpoint: ${REPLICA2_ENDPOINT}
         region: ${REPLICA2_REGION}
         access-key-id: ${REPLICA2_ACCESS_KEY_ID}

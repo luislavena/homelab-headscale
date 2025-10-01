@@ -89,3 +89,4 @@ COPY ./templates/litestream.template.yml /etc/litestream.yml
 COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
 
 ENTRYPOINT ["/container-entrypoint.sh"]
+CMD ["/usr/local/bin/headscale", "/data/headscale.sqlite3", "serve"]

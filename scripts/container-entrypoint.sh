@@ -2,6 +2,25 @@
 
 set -e
 
+# Capture APP and DB_FILE from command line arguments
+APP=$1
+DB_FILE=$2
+shift 2
+APP_ARGS="$@"
+
+# Validate that both arguments are provided
+if [ -z "$APP" ] || [ -z "$DB_FILE" ]; then
+    echo "ERROR: Both APP and DB_FILE arguments are required" >&2
+    echo "Usage: $0 <app_path> <db_file_path> [app_args...]"
+    echo "Example: $0 /usr/local/bin/headscale /data/headscale.sqlite3 serve"
+    exit 1
+fi
+
+DB_PATH=$(dirname ${DB_FILE})
+
+export APP_NAME=$(basename ${APP})
+export DB_FILE
+
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
 	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
@@ -50,8 +69,23 @@ if ! check_socket_directory; then
 	exit 1
 fi
 
-echo "INFO: Attempt to restore Headscale database if missing..."
-litestream restore -if-db-not-exists -if-replica-exists /data/headscale.sqlite3
+# running user
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
 
-echo "INFO: Starting Headscale using Litestream..."
-exec litestream replicate -exec 'headscale serve'
+if [ ! -d "${DB_PATH}" ]; then
+    echo "INFO: Creating database directory ${DB_PATH}..."
+    mkdir -p "${DB_PATH}"
+fi
+
+echo "INFO: Ensure correct ownership of database directory..."
+find "${DB_PATH}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
+
+echo "INFO: Ensure correct ownership of socket directory..."
+find "/var/run/${APP_NAME}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
+
+echo "INFO: Attempting to restore database if missing..."
+su-exec "$PUID:$PGID" litestream restore -if-db-not-exists -if-replica-exists ${DB_FILE}
+
+echo "INFO: Starting application using Litestream..."
+exec su-exec "$PUID:$PGID" litestream replicate -exec "${APP} ${APP_ARGS}"
