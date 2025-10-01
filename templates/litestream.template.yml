@@ -2,11 +2,19 @@
 dbs:
   - path: /data/headscale.sqlite3
     replicas:
-      - name: s3_replica
+      - name: replica1
         type: s3
-        bucket: ${S3_BUCKET_NAME}
+        bucket: ${REPLICA1_BUCKET}
         path: headscale
-        endpoint: ${S3_ENDPOINT}
-        region: ${S3_REGION}
-        access-key-id: ${S3_ACCESS_KEY_ID}
-        secret-access-key: ${S3_SECRET_ACCESS_KEY}
+        endpoint: ${REPLICA1_ENDPOINT}
+        region: ${REPLICA1_REGION}
+        access-key-id: ${REPLICA1_ACCESS_KEY_ID}
+        secret-access-key: ${REPLICA1_SECRET_ACCESS_KEY}
+      - name: replica2
+        type: s3
+        bucket: ${REPLICA2_BUCKET}
+        path: headscale
+        endpoint: ${REPLICA2_ENDPOINT}
+        region: ${REPLICA2_REGION}
+        access-key-id: ${REPLICA2_ACCESS_KEY_ID}
+        secret-access-key: ${REPLICA2_SECRET_ACCESS_KEY}
