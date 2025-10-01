@@ -1,10 +1,24 @@
-FROM alpine:3.21.3
+# syntax=registry.docker.com/docker/dockerfile:1
+
+ARG ALPINE_VERSION=3.22.1
+FROM registry.docker.com/library/alpine:${ALPINE_VERSION}
 
 # ---
-# upgrade system and installed dependencies for security patches
-RUN --mount=type=cache,sharing=private,target=/var/cache/apk \
+# system tools & non-root user (1000)
+RUN --mount=type=cache,target=/var/cache/apk \
     set -eux; \
-    apk upgrade
+    { \
+        apk add \
+            su-exec \
+        ; \
+    }; \
+    # non-root user and group
+    { \
+        addgroup -g 1000 headscale; \
+        adduser -u 1000 -G headscale -h /app -s /bin/sh -D headscale; \
+        # cleanup backup copies
+        rm /etc/group- /etc/passwd- /etc/shadow-; \
+    }
 
 # ---
 # copy headscale
