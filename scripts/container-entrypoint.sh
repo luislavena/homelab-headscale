@@ -10,30 +10,19 @@ check_config_files() {
 
 	local abort_config=0
 
-	# check for Headscale config file
-	if [ ! -f $headscale_config_path ]; then
-		echo "INFO: No Headscale configuration file found, creating one using environment variables..."
+	# abort if needed variables are missing
+	if [ -z "$HEADSCALE_SERVER_URL" ]; then
+		echo "ERROR: Required environment variable 'HEADSCALE_SERVER_URL' is missing." >&2
+		abort_config=1
+	fi
 
-		# abort if needed variables are missing
-		if [ -z "$HEADSCALE_SERVER_URL" ]; then
-			echo "ERROR: Required environment variable 'HEADSCALE_SERVER_URL' is missing." >&2
-			abort_config=1
-		fi
+	if [ -z "$HEADSCALE_BASE_DOMAIN" ]; then
+		echo "ERROR: Required environment variable 'HEADSCALE_BASE_DOMAIN' is missing." >&2
+		abort_config=1
+	fi
 
-		if [ -z "$HEADSCALE_BASE_DOMAIN" ]; then
-			echo "ERROR: Required environment variable 'HEADSCALE_BASE_DOMAIN' is missing." >&2
-			abort_config=1
-		fi
-
-		if [ $abort_config -eq 0 ]; then
-			mkdir -p /etc/headscale
-			cp $headscale_config_template $headscale_config_path
-			sed -i "s@\$HEADSCALE_SERVER_URL@$HEADSCALE_SERVER_URL@" $headscale_config_path
-			sed -i "s@\$HEADSCALE_BASE_DOMAIN@$HEADSCALE_BASE_DOMAIN@" $headscale_config_path
-			echo "INFO: Headscale configuration file created."
-		else
-			return $abort_config
-		fi
+	if [ $abort_config -ne 0 ]; then
+		return $abort_config
 	fi
 
 	if [ ! -f $headscale_private_key_path ]; then
