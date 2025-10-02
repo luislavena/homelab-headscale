@@ -84,9 +84,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
 
 # ---
 # copy configuration and templates
-COPY ./templates/headscale.template.yaml /etc/headscale/config.yaml
-COPY ./templates/litestream.template.yml /etc/litestream.yml
-COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
+COPY ./container/headscale.yaml /etc/headscale/config.yaml
+COPY ./container/litestream.yml /etc/litestream.yml
+COPY ./container/entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/container-entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/data/headscale.sqlite3", "/usr/local/bin/headscale", "serve"]
