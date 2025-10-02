@@ -1,0 +1,3 @@
+kind: fixed
+body: Remove unused variable after cleanup
+time: 2025-10-02T17:28:46.283234+02:00

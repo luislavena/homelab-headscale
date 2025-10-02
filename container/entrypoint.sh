@@ -27,7 +27,6 @@ PGID=${PGID:-1000}
 
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
-	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
 	local headscale_noise_private_key_path=/app/data/noise_private.key
 
 	local abort_config=0
