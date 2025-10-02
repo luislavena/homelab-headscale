@@ -12,7 +12,7 @@ APP_ARGS="$@"
 if [ -z "$DB_FILE" ] || [ -z "$APP" ]; then
     echo "ERROR: Both DB_FILE and APP arguments are required" >&2
     echo "Usage: $0 <db_file_path> <app_path> [app_args...]"
-    echo "Example: $0 /data/headscale.sqlite3 /usr/local/bin/headscale serve"
+    echo "Example: $0 /app/data/headscale.db /usr/local/bin/headscale serve"
     exit 1
 fi
 

@@ -42,7 +42,7 @@ services:
       - "8080:8080"
 
     volumes:
-      - headscale:/data
+      - headscale:/app/data
 
   replica1: &replica
     image: registry.docker.com/bitnamilegacy/minio:latest
