@@ -90,5 +90,6 @@ COPY ./container/headscale.yaml /etc/headscale/config.yaml
 COPY ./container/litestream.yml /etc/litestream.yml
 COPY ./container/entrypoint.sh /entrypoint.sh
 
+EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/app/data/headscale.db", "/usr/local/bin/headscale", "serve"]
