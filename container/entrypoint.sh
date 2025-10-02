@@ -93,5 +93,10 @@ fi
 echo "INFO: Attempting to restore database if missing..."
 su-exec "$PUID:$PGID" litestream restore -if-db-not-exists -if-replica-exists ${DB_FILE}
 
-echo "INFO: Starting application using Litestream..."
-exec su-exec "$PUID:$PGID" litestream replicate -exec "${APP} ${APP_ARGS}"
+if [ -z "$DISABLE_REPLICATION" ]; then
+	echo "INFO: Starting application using Litestream..."
+	exec su-exec "$PUID:$PGID" litestream replicate -exec "${APP} ${APP_ARGS}"
+else
+	echo "INFO: Replication disabled, starting application directly..."
+	exec su-exec "$PUID:$PGID" ${APP} ${APP_ARGS}
+fi

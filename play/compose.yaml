@@ -17,6 +17,8 @@ services:
       - HEADSCALE_BASE_DOMAIN=tn.luislavena.local
       # - HEADSCALE_PRIVATE_KEY=CHANGEME
       # - HEADSCALE_NOISE_PRIVATE_KEY=CHANGEME
+      # TEST: disable replication
+      - DISABLE_REPLICATION=true
       # Replica 1
       - REPLICA1_BUCKET=mybackup
       - REPLICA1_ENDPOINT=http://replica1:9000
