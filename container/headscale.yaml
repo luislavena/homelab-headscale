@@ -2,9 +2,8 @@
 server_url: $HEADSCALE_SERVER_URL
 listen_addr: 0.0.0.0:8080
 metrics_listen_addr: 0.0.0.0:9090
-private_key_path: /data/private.key
 noise:
-  private_key_path: /data/noise_private.key
+  private_key_path: /app/data/noise_private.key
 
 prefixes:
   allocation: sequential
@@ -25,7 +24,7 @@ disable_check_updates: true
 database:
   type: sqlite
   sqlite:
-    path: /data/headscale.sqlite3
+    path: /app/data/headscale.db
 
 # TLS
 tls_cert_path: ""

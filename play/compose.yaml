@@ -15,8 +15,9 @@ services:
     environment:
       - HEADSCALE_SERVER_URL=https://hs.example.local
       - HEADSCALE_BASE_DOMAIN=tn.luislavena.local
-      # - HEADSCALE_PRIVATE_KEY=CHANGEME
       # - HEADSCALE_NOISE_PRIVATE_KEY=CHANGEME
+      # TEST: disable replication
+      - DISABLE_REPLICATION=true
       # Replica 1
       - REPLICA1_BUCKET=mybackup
       - REPLICA1_ENDPOINT=http://replica1:9000
@@ -40,7 +41,7 @@ services:
       - "8080:8080"
 
     volumes:
-      - headscale:/data
+      - headscale:/app/data
 
   replica1: &replica
     image: registry.docker.com/bitnamilegacy/minio:latest

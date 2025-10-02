@@ -56,6 +56,7 @@ RUN --mount=type=tmpfs,target=/tmp \
 RUN --mount=type=cache,target=/var/cache/apk \
     --mount=type=tmpfs,target=/tmp \
     set -eux; \
+    mkdir -p /app; \
     cd /tmp; \
     # Headscale
     { \
@@ -79,14 +80,15 @@ RUN --mount=type=cache,target=/var/cache/apk \
         chmod +x headscale; \
         mv headscale /usr/local/bin/; \
     }; \
+    # smoke test
     [ "$(command -v headscale)" = '/usr/local/bin/headscale' ]; \
     headscale version
 
 # ---
 # copy configuration and templates
-COPY ./templates/headscale.template.yaml /etc/headscale/config.yaml
-COPY ./templates/litestream.template.yml /etc/litestream.yml
-COPY ./scripts/container-entrypoint.sh /container-entrypoint.sh
+COPY ./container/headscale.yaml /etc/headscale/config.yaml
+COPY ./container/litestream.yml /etc/litestream.yml
+COPY ./container/entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/container-entrypoint.sh"]
-CMD ["/usr/local/bin/headscale", "/data/headscale.sqlite3", "serve"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/app/data/headscale.db", "/usr/local/bin/headscale", "serve"]

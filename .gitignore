@@ -1,3 +1,2 @@
 *.env
 fly.toml
-headscale.yaml
