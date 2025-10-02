@@ -11,8 +11,6 @@ prefixes:
   v6: fd7a:115c:a1e0::/48
 
 derp:
-  server:
-    enabled: false
   urls:
     - https://controlplane.tailscale.com/derpmap/default
   auto_update_enabled: true
@@ -20,6 +18,9 @@ derp:
 
 # Disables the automatic check for headscale updates on startup
 disable_check_updates: true
+
+# Remove ephemeral nodes after being inactive
+ephemeral_node_inactivity_timeout: 30m
 
 database:
   type: sqlite
@@ -41,10 +42,9 @@ dns:
   magic_dns: true
   base_domain: $HEADSCALE_BASE_DOMAIN
   nameservers:
-    - 1.1.1.1
-    - 1.0.0.1
-    - 2606:4700:4700::1111
-    - 2606:4700:4700::1001
-
-logtail:
-  enabled: false
+    global:
+      # Cloudflare DNS
+      - 1.1.1.1
+      - 2606:4700:4700::1111
+      - 1.0.0.1
+      - 2606:4700:4700::1001
