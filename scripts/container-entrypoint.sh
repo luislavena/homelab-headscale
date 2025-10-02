@@ -2,17 +2,17 @@
 
 set -e
 
-# Capture APP and DB_FILE from command line arguments
-APP=$1
-DB_FILE=$2
+# Capture DB_FILE, APP, and possible arguments from command line
+DB_FILE=$1
+APP=$2
 shift 2
 APP_ARGS="$@"
 
 # Validate that both arguments are provided
-if [ -z "$APP" ] || [ -z "$DB_FILE" ]; then
-    echo "ERROR: Both APP and DB_FILE arguments are required" >&2
-    echo "Usage: $0 <app_path> <db_file_path> [app_args...]"
-    echo "Example: $0 /usr/local/bin/headscale /data/headscale.sqlite3 serve"
+if [ -z "$DB_FILE" ] || [ -z "$APP" ]; then
+    echo "ERROR: Both DB_FILE and APP arguments are required" >&2
+    echo "Usage: $0 <db_file_path> <app_path> [app_args...]"
+    echo "Example: $0 /data/headscale.sqlite3 /usr/local/bin/headscale serve"
     exit 1
 fi
 
