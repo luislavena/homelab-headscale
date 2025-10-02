@@ -15,7 +15,6 @@ services:
     environment:
       - HEADSCALE_SERVER_URL=https://hs.example.local
       - HEADSCALE_BASE_DOMAIN=tn.luislavena.local
-      # - HEADSCALE_PRIVATE_KEY=CHANGEME
       # - HEADSCALE_NOISE_PRIVATE_KEY=CHANGEME
       # TEST: disable replication
       - DISABLE_REPLICATION=true

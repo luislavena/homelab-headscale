@@ -28,7 +28,6 @@ PGID=${PGID:-1000}
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
 	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
-	local headscale_private_key_path=/data/private.key
 	local headscale_noise_private_key_path=/data/noise_private.key
 
 	local abort_config=0
@@ -46,12 +45,6 @@ check_config_files() {
 
 	if [ $abort_config -ne 0 ]; then
 		return $abort_config
-	fi
-
-	if [ ! -f $headscale_private_key_path ]; then
-		if [ ! -z "$HEADSCALE_PRIVATE_KEY" ]; then
-			echo -n "$HEADSCALE_PRIVATE_KEY" > $headscale_private_key_path
-		fi
 	fi
 
 	if [ ! -f $headscale_noise_private_key_path ]; then

@@ -129,26 +129,24 @@ $ headscale users create homelab
 ### 5. Final configuration
 
 Now that Headscale is running, to have a 100% reproducible setup, we need to
-ensure that private keys initialized by our installation are persisted, so
-we need to capture the contents of `/data/private.key` and
-`/data/noise_private.key` and place into secrets of our application.
+ensure that the private key initialized by our installation is persisted, so
+we need to capture the contents of `/app/data/noise_private.key` and place into
+secrets of our application.
 
-Within the same Fly console from previous step, obtain the contents of these
-files:
+Within the same Fly console from previous step, obtain the contents of this
+file:
 
 ```console
-$ cat /data/private.key
-
-$ cat /data/noise_private.key
+$ cat /app/data/noise_private.key
 ```
 
 Copy those to your clipboard and terminate Fly's console.
 
-Locally, use `flyctl` to set `HEADSCALE_PRIVATE_KEY` and
-`HEADSCALE_NOISE_PRIVATE_KEY` with the values obtained before, respectively
+Locally, use `flyctl` to set `HEADSCALE_NOISE_PRIVATE_KEY` with the values
+obtained before, respectively.
 
 ```console
-$ flyctl secrets set HEADSCALE_PRIVATE_KEY=privkey:abc123... HEADSCALE_NOISE_PRIVATE_KEY=privkey:def456...
+$ flyctl secrets set HEADSCALE_NOISE_PRIVATE_KEY=privkey:def456...
 ```
 
 Note that applying these two variables will cause your application to restart,
