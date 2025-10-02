@@ -21,6 +21,10 @@ DB_PATH=$(dirname ${DB_FILE})
 export APP_NAME=$(basename ${APP})
 export DB_FILE
 
+# running user
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
 	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
@@ -57,32 +61,34 @@ check_config_files() {
 	fi
 }
 
+check_database_directory() {
+	if [ ! -d "${DB_PATH}" ]; then
+		echo "INFO: Creating database directory ${DB_PATH}..."
+		mkdir -p "${DB_PATH}"
+	fi
+
+	echo "INFO: Ensure correct ownership of database directory..."
+	find "${DB_PATH}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
+}
+
 check_socket_directory() {
 	mkdir -p /var/run/headscale
+
+	echo "INFO: Ensure correct ownership of socket directory..."
+	find "/var/run/${APP_NAME}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
 }
 
 if ! check_config_files; then
 	exit 1
 fi
 
-if ! check_socket_directory; then
+if ! check_database_directory; then
 	exit 1
 fi
 
-# running user
-PUID=${PUID:-1000}
-PGID=${PGID:-1000}
-
-if [ ! -d "${DB_PATH}" ]; then
-    echo "INFO: Creating database directory ${DB_PATH}..."
-    mkdir -p "${DB_PATH}"
+if ! check_socket_directory; then
+	exit 1
 fi
-
-echo "INFO: Ensure correct ownership of database directory..."
-find "${DB_PATH}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
-
-echo "INFO: Ensure correct ownership of socket directory..."
-find "/var/run/${APP_NAME}" \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
 
 echo "INFO: Attempting to restore database if missing..."
 su-exec "$PUID:$PGID" litestream restore -if-db-not-exists -if-replica-exists ${DB_FILE}
