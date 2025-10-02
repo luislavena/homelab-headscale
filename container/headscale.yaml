@@ -11,8 +11,6 @@ prefixes:
   v6: fd7a:115c:a1e0::/48
 
 derp:
-  server:
-    enabled: false
   urls:
     - https://controlplane.tailscale.com/derpmap/default
   auto_update_enabled: true
