@@ -27,35 +27,43 @@ PGID=${PGID:-1000}
 
 check_config_files() {
 	local headscale_config_path=/etc/headscale/config.yaml
-	local headscale_config_template=/usr/local/share/headscale/config.template.yaml
 	local headscale_noise_private_key_path=/app/data/noise_private.key
 
 	local abort_config=0
 
-	# check for Headscale config file
-	if [ ! -f $headscale_config_path ]; then
-		echo "INFO: No Headscale configuration file found, creating one using environment variables..."
+	# abort if needed variables are missing
+	if [ -z "$HEADSCALE_SERVER_URL" ]; then
+		echo "ERROR: Required environment variable 'HEADSCALE_SERVER_URL' is missing." >&2
+		abort_config=1
+	fi
 
-		# abort if needed variables are missing
-		if [ -z "$HEADSCALE_SERVER_URL" ]; then
-			echo "ERROR: Required environment variable 'HEADSCALE_SERVER_URL' is missing." >&2
-			abort_config=1
-		fi
+	if [ -z "$HEADSCALE_BASE_DOMAIN" ]; then
+		echo "ERROR: Required environment variable 'HEADSCALE_BASE_DOMAIN' is missing." >&2
+		abort_config=1
+	fi
 
-		if [ -z "$HEADSCALE_BASE_DOMAIN" ]; then
-			echo "ERROR: Required environment variable 'HEADSCALE_BASE_DOMAIN' is missing." >&2
-			abort_config=1
-		fi
+	if [ $abort_config -eq 0 ]; then
+		mkdir -p /etc/headscale
 
-		if [ $abort_config -eq 0 ]; then
-			mkdir -p /etc/headscale
-			cp $headscale_config_template $headscale_config_path
+		local config_updated=0
+
+		if grep -q '\$HEADSCALE_SERVER_URL' $headscale_config_path; then
 			sed -i "s@\$HEADSCALE_SERVER_URL@$HEADSCALE_SERVER_URL@" $headscale_config_path
-			sed -i "s@\$HEADSCALE_BASE_DOMAIN@$HEADSCALE_BASE_DOMAIN@" $headscale_config_path
-			echo "INFO: Headscale configuration file created."
-		else
-			return $abort_config
+			config_updated=1
 		fi
+
+		if grep -q '\$HEADSCALE_BASE_DOMAIN' $headscale_config_path; then
+			sed -i "s@\$HEADSCALE_BASE_DOMAIN@$HEADSCALE_BASE_DOMAIN@" $headscale_config_path
+			config_updated=1
+		fi
+
+		if [ $config_updated -eq 1 ]; then
+			echo "INFO: Headscale configuration file updated."
+		else
+			echo "INFO: Headscale configuration file already up-to-date."
+		fi
+	else
+		return $abort_config
 	fi
 
 	if [ ! -f $headscale_noise_private_key_path ]; then
