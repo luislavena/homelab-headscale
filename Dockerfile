@@ -1,6 +1,6 @@
 # syntax=registry.docker.com/docker/dockerfile:1
 
-ARG ALPINE_VERSION=3.22.1
+ARG ALPINE_VERSION=3.23.2
 FROM registry.docker.com/library/alpine:${ALPINE_VERSION}
 
 # ---
@@ -60,18 +60,18 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cd /tmp; \
     # Headscale
     { \
-        export HEADSCALE_VERSION=0.26.1; \
+        export HEADSCALE_VERSION=0.27.1; \
         case "$(arch)" in \
         x86_64) \
             export \
                 HEADSCALE_ARCH=amd64 \
-                HEADSCALE_SHA256=5012577e6fc5d4234aab7b4be0d6e271ea1a4ec38521a8aa472f80ea1fe81cba \
+                HEADSCALE_SHA256=af2a232ff407c100f05980b4d8fceaafc7fdb2e8de5eba8e184a8bb029cb6c00 \
             ; \
             ;; \
         aarch64) \
             export \
                 HEADSCALE_ARCH=arm64 \
-                HEADSCALE_SHA256=98981ea52a96260f310433c73927935bf7628eedcc4c3f747059506154edba78 \
+                HEADSCALE_SHA256=5af2bd4e18e9267b9770b94ebb60b07e6f32b586b31840b937f628d017e2722a \
             ; \
             ;; \
         esac; \
