@@ -1,6 +1,6 @@
 # syntax=registry.docker.com/docker/dockerfile:1
 
-ARG ALPINE_VERSION=3.23.3
+ARG ALPINE_VERSION=3.24.1
 FROM registry.docker.com/library/alpine:${ALPINE_VERSION}
 
 # ---
@@ -26,18 +26,18 @@ RUN --mount=type=tmpfs,target=/tmp \
     set -eux; \
     cd /tmp; \
     { \
-        export LITESTREAM_VERSION=0.3.13; \
+        export LITESTREAM_VERSION=0.3.14; \
         case "$(arch)" in \
         x86_64) \
             export \
                 LITESTREAM_ARCH=amd64 \
-                LITESTREAM_SHA256=eb75a3de5cab03875cdae9f5f539e6aedadd66607003d9b1e7a9077948818ba0 \
+                LITESTREAM_SHA256=880ccafc9514650c4a2a0cc78eb1e61aaad95dd3e86e877c8694f955c9095436 \
             ; \
             ;; \
         aarch64) \
             export \
                 LITESTREAM_ARCH=arm64 \
-                LITESTREAM_SHA256=9585f5a508516bd66af2b2376bab4de256a5ef8e2b73ec760559e679628f2d59 \
+                LITESTREAM_SHA256=4d375a66653e4a9b27a5b38ce9cb73681c39893ba0485f81ab860d4cd427e642 \
             ; \
             ;; \
         esac; \
@@ -60,18 +60,18 @@ RUN --mount=type=cache,target=/var/cache/apk \
     cd /tmp; \
     # Headscale
     { \
-        export HEADSCALE_VERSION=0.28.0; \
+        export HEADSCALE_VERSION=0.29.2; \
         case "$(arch)" in \
         x86_64) \
             export \
                 HEADSCALE_ARCH=amd64 \
-                HEADSCALE_SHA256=95f242a31003d60646d233b14a1acacac20d8f319886d0441df085cc3a920f2d \
+                HEADSCALE_SHA256=858ef94bca9ecdfc742c24119c831e437e1b75691fdd5041be4059db1a38aac0 \
             ; \
             ;; \
         aarch64) \
             export \
                 HEADSCALE_ARCH=arm64 \
-                HEADSCALE_SHA256=0b8d8739b8a243b01afdab04359ebec9e8b16e13d3e7eb4ba71c7c1173c18345 \
+                HEADSCALE_SHA256=7f458586fcb4ba5832e4fa7b097948ec99fbca2bb4dd02b335a379f78e7807ac \
             ; \
             ;; \
         esac; \

@@ -10,6 +10,8 @@ dbs:
         region: ${REPLICA1_REGION}
         access-key-id: ${REPLICA1_ACCESS_KEY_ID}
         secret-access-key: ${REPLICA1_SECRET_ACCESS_KEY}
+        snapshot-interval: 1h
+        retention: 24h
       - name: replica2
         type: s3
         bucket: ${REPLICA2_BUCKET}
@@ -18,3 +20,5 @@ dbs:
         region: ${REPLICA2_REGION}
         access-key-id: ${REPLICA2_ACCESS_KEY_ID}
         secret-access-key: ${REPLICA2_SECRET_ACCESS_KEY}
+        snapshot-interval: 1h
+        retention: 24h
