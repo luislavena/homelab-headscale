@@ -26,18 +26,18 @@ RUN --mount=type=tmpfs,target=/tmp \
     set -eux; \
     cd /tmp; \
     { \
-        export LITESTREAM_VERSION=0.3.13; \
+        export LITESTREAM_VERSION=0.3.14; \
         case "$(arch)" in \
         x86_64) \
             export \
                 LITESTREAM_ARCH=amd64 \
-                LITESTREAM_SHA256=eb75a3de5cab03875cdae9f5f539e6aedadd66607003d9b1e7a9077948818ba0 \
+                LITESTREAM_SHA256=880ccafc9514650c4a2a0cc78eb1e61aaad95dd3e86e877c8694f955c9095436 \
             ; \
             ;; \
         aarch64) \
             export \
                 LITESTREAM_ARCH=arm64 \
-                LITESTREAM_SHA256=9585f5a508516bd66af2b2376bab4de256a5ef8e2b73ec760559e679628f2d59 \
+                LITESTREAM_SHA256=4d375a66653e4a9b27a5b38ce9cb73681c39893ba0485f81ab860d4cd427e642 \
             ; \
             ;; \
         esac; \
