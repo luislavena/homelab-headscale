@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.7.0 - 2026-07-26
+
+### Changed
+
+- Upgrade to Alpine Linux 3.24.1
+- Upgrade to Litestream 0.3.14, fixing a panic during database restore
+- Move ephemeral node timeout to the new `node.ephemeral.inactivity_timeout` setting
+- Upgrade to Headscale 0.29.2 (upgrade from 0.28.x only, skipping minor versions is blocked)
+
+### Fixed
+
+- Take Litestream snapshots hourly to shorten database restores
+
+### Internal
+
+- Keep only one line in VERSION file
+
 ## v0.6.0 - 2026-03-08
 
 ### Changed
