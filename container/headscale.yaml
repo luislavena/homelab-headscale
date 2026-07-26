@@ -19,8 +19,10 @@ derp:
 # Disables the automatic check for headscale updates on startup
 disable_check_updates: true
 
-# Remove ephemeral nodes after being inactive
-ephemeral_node_inactivity_timeout: 30m
+node:
+  # Remove ephemeral nodes after being inactive
+  ephemeral:
+    inactivity_timeout: 30m
 
 database:
   type: sqlite
