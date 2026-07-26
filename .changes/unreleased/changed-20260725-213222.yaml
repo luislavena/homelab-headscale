@@ -1,3 +1,0 @@
-kind: changed
-body: Move ephemeral node timeout to the new `node.ephemeral.inactivity_timeout` setting
-time: 2026-07-25T21:32:22.381387-03:00
