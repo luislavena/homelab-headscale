@@ -24,6 +24,8 @@ docs/
   fly/                      # Fly.io deployment templates
 play/
   compose.yaml              # Docker Compose for local development
+test/
+  run.sh                    # End-to-end and upgrade test
 .changes/                   # Changie changelog entries
 .github/workflows/          # CI/CD pipelines
 ```
@@ -106,7 +108,7 @@ verification.
 
 ### Validation
 
-All commands below run from the `play/` directory.
+Run build validation from the `play/` directory.
 
 #### Build validation
 
@@ -114,57 +116,24 @@ Run `docker compose build` and confirm it completes without errors. This
 verifies Dockerfile syntax, binary downloads, SHA256 checksums, and the
 built-in smoke tests.
 
-#### Runtime validation
+#### Runtime and upgrade validation
 
 When changes affect runtime behavior (entrypoint, config templates, version
-bumps), verify the container starts and operates correctly:
+bumps), run the end-to-end test from the repository root:
 
-1. Start the stack in detached mode:
+```
+test/run.sh main
+```
 
-   ```
-   docker compose up -d
-   ```
+It builds `main` and the working tree, starts Headscale on the `main`
+build, creates a user and pre-auth keys, and joins two Tailscale nodes. It
+checks ping and Tailscale SSH between them. Then it upgrades the server to
+the working tree, checks that users and nodes did not change, and checks
+traffic again. Last, it joins a third node with a key from the new version.
+The script prints `PASS` or a `FAIL:` line with recent logs, and removes
+its containers and volumes on exit.
 
-2. Wait for the health check interval (~30 s) and confirm all services
-   report `(healthy)`:
-
-   ```
-   docker compose ps
-   ```
-
-3. Inspect server logs for startup errors or unexpected warnings:
-
-   ```
-   docker compose logs server
-   ```
-
-4. Verify the health endpoint returns HTTP 200:
-
-   ```
-   curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health
-   ```
-
-5. Shut down the stack when done:
-
-   ```
-   docker compose down
-   ```
-
-#### Upgrade validation
-
-When bumping Headscale or Litestream versions, test the database migration
-path to catch incompatibilities early:
-
-1. **Before** applying changes, build and start the current version to
-   create a baseline database (`docker compose build && docker compose up -d`).
-   Confirm the container is healthy, then stop it with
-   `docker compose down`. The database volume persists across restarts.
-2. Apply the version bump and rebuild (`docker compose build`).
-3. Start the stack again (`docker compose up -d`). The new version will
-   open the existing database and run any pending migrations.
-4. Confirm the container reaches `(healthy)` status, check the logs for
-   migration errors, and verify the health endpoint.
-5. Shut down with `docker compose down`.
+Run `test/run.sh` without a ref to test only the working tree build.
 
 ## Pull request conventions
 
