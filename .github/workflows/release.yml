@@ -20,11 +20,11 @@ jobs:
       version-tag: ${{ steps.version.outputs.version-tag }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Get latest version
         id: changie
-        uses: miniscruff/changie-action@v2
+        uses: miniscruff/changie-action@v3
         with:
           version: latest
           args: latest
@@ -43,13 +43,13 @@ jobs:
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Depot CLI
         uses: depot/setup-action@v1
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -74,7 +74,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Build release notes
         run: |
@@ -92,7 +92,7 @@ jobs:
           git push origin ${{ needs.setup.outputs.version-tag }}
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.setup.outputs.version-tag }}
           name: ${{ needs.setup.outputs.version-tag }}
