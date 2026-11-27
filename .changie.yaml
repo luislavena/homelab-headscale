@@ -31,7 +31,7 @@ newlines:
 
 replacements:
   - path: VERSION
-    find: ".*"
+    find: '(?s).*'
     replace: "{{.VersionNoPrefix}}"
 
 envPrefix: CHANGIE_
